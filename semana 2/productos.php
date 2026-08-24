@@ -40,7 +40,7 @@
         <div class="row">
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWII31YPdDyljPlRw9hrz8myNn8jBvQLY4Cu6kwcL78GjK87lsJTTgBiWZ&s=10" class="card-img-top" alt="Auto A">
+                    <img src="https://picsum.photos/seed/carA/400/250" class="card-img-top" alt="Auto A">
                     <div class="card-body">
                         <h5 class="card-title">Chevrolet Sail 2022</h5>
                         <p class="card-text">45.000 km · Automático · Full equipo</p>
@@ -51,7 +51,7 @@
             </div>
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <img src="https://i.pinimg.com/736x/a9/30/b3/a930b3d11ee45532122768b130dc5132.jpg" class="card-img-top" alt="Auto B">
+                    <img src="https://picsum.photos/seed/carB/400/250" class="card-img-top" alt="Auto B">
                     <div class="card-body">
                         <h5 class="card-title">Suzuki Swift 2021</h5>
                         <p class="card-text">38.000 km · Mecánico · Único dueño</p>
@@ -62,7 +62,7 @@
             </div>
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <img src="https://acnews.blob.core.windows.net/imgnews/medium/NAZ_73b93c87fa7a40f4b704b639ebf3d54b.jpg" class="card-img-top" alt="Auto C">
+                    <img src="https://picsum.photos/seed/carC/400/250" class="card-img-top" alt="Auto C">
                     <div class="card-body">
                         <h5 class="card-title">Hyundai Tucson 2023</h5>
                         <p class="card-text">20.000 km · Automático · 4x2</p>
