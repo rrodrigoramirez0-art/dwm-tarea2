@@ -42,5 +42,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
+<!-- Script JS con manipulación del DOM -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form');
+    const emailInput = document.getElementById('email');
 
+    form.addEventListener('submit', (e) => {
+        // Validación con DOM en el cliente
+        if (!emailInput.value.includes('@')) {
+            e.preventDefault();
+            
+            // Creación dinámica de un mensaje de alerta en el DOM
+            let errorDiv = document.getElementById('js-error');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.id = 'js-error';
+                errorDiv.className = 'alert alert-danger mt-3';
+                form.appendChild(errorDiv);
+            }
+            errorDiv.textContent = 'Por favor ingresa un correo válido (debe incluir @).';
+        }
+    });
+});
+</script>
 <?php include 'includes/footer.php'; ?>
