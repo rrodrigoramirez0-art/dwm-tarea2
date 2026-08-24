@@ -48,5 +48,15 @@
             </div>
         </div>
     </div>
+<?php
+// Ejemplo de uso de DOMDocument para generar un aviso dinámico en servidor
+$dom = new DOMDocument();
+$alertDiv = $dom->createElement('div', '¡Consulta por nuestras promociones de temporada en taller!');
+$alertDiv->setAttribute('class', 'alert alert-info text-center my-3');
+$dom->appendChild($alertDiv);
+?>
 
+<div class="container">
+    <?php echo $dom->saveHTML(); ?>
+</div>
 <?php include 'includes/footer.php'; ?>
