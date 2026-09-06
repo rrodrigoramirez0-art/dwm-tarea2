@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bocato - Sánguches Italianos</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; background-color: #d1c7b7; display: flex; justify-content: center; padding: 20px; }
+    .tablet-wrapper { width: 100%; max-width: 480px; background-color: #f7f3e9; border: 2px solid #333; min-height: 750px; display: flex; flex-direction: column; }
+    header { background-color: #eddcc4; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #c8b8a2; }
+    .header-left { display: flex; align-items: center; gap: 10px; }
+    .logo-circle { width: 35px; height: 35px; background-color: #fff; border: 2px solid #8b0000; border-radius: 50%; }
+    .menu-btn { display: flex; flex-direction: column; gap: 4px; background-color: #a8322d; padding: 6px; border-radius: 4px; }
+    .menu-btn span { width: 20px; height: 3px; background-color: #fff; }
+    .header-center { background-color: #a8322d; color: #fff; padding: 8px 24px; border-radius: 6px; font-weight: bold; }
+    .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+    .header-right-top { width: 40px; height: 8px; background-color: #a8322d; border-radius: 2px; }
+    .color-dots { display: flex; gap: 3px; }
+    .dot { width: 10px; height: 10px; border-radius: 2px; }
+    .dot.blue { background-color: #4a6fa5; }
+    .dot.pink { background-color: #c05c7e; }
+    .dot.green { background-color: #6b8e23; }
+    .content { padding: 15px; display: flex; flex-direction: column; gap: 12px; flex-grow: 1; }
+    .sub-header-container { display: flex; gap: 10px; align-items: center; }
+    .small-oval { width: 50px; height: 25px; border: 2px solid #556b2f; border-radius: 12px; }
+    .banner-top { flex-grow: 1; height: 45px; border: 2px solid #a8322d; background-color: #fffdf9; border-radius: 4px; }
+    .main-grid { display: grid; grid-template-columns: 80px 1fr; gap: 12px; flex-grow: 1; }
+    .sidebar { border: 2px solid #6b8e23; background-color: #f3efe6; border-radius: 4px; padding: 8px; }
+    .main-card { border: 2px solid #556b2f; background-color: #fffdf9; border-radius: 4px; padding: 15px; min-height: 360px; }
+    footer { background-color: #556b2f; padding: 25px 15px; display: flex; align-items: flex-end; }
+    footer .color-dots { gap: 6px; }
+    footer .dot { width: 14px; height: 14px; }
+  </style>
+</head>
+<body>
+  <div class="tablet-wrapper">
+    <header>
+      <div class="header-left">
+        <div class="logo-circle"></div>
+        <div class="menu-btn"><span></span><span></span><span></span></div>
+      </div>
+      <div class="header-center">BOCATO</div>
+      <div class="header-right">
+        <div class="header-right-top"></div>
+        <div class="color-dots"><div class="dot blue"></div><div class="dot pink"></div><div class="dot green"></div></div>
+      </div>
+    </header>
+    <div class="content">
+      <div class="sub-header-container">
+        <div class="small-oval"></div>
+        <div class="banner-top"></div>
+      </div>
+      <div class="main-grid">
+        <aside class="sidebar"></aside>
+        <main class="main-card"></main>
+      </div>
+    </div>
+    <footer>
+      <div class="color-dots"><div class="dot blue"></div><div class="dot pink"></div><div class="dot green"></div></div>
+    </footer>
+  </div>
+</body>
+</html>
