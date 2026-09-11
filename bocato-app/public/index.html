@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bocato - Sánguches Italianos</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f7f3e9;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 1. Header Web */
+    header {
+      background-color: #eddcc4;
+      padding: 15px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #d1bd9d;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo-circle {
+      width: 48px;
+      height: 48px;
+      background-color: #ffffff;
+      border: 3px solid #8b1e18;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #8b1e18;
+      font-size: 20px;
+    }
+
+    .menu-btn {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background-color: #a82e26;
+      padding: 8px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .menu-btn span {
+      width: 22px;
+      height: 3px;
+      background-color: #ffffff;
+      border-radius: 2px;
+    }
+
+    .header-center-title {
+      background-color: #a82e26;
+      color: #ffffff;
+      padding: 10px 35px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: 3px;
+      border: 2px solid #801d17;
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .header-badge {
+      width: 50px;
+      height: 10px;
+      background-color: #a82e26;
+      border-radius: 3px;
+    }
+
+    .theme-selectors {
+      display: flex;
+      gap: 6px;
+    }
+
+    .color-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .dot-blue { background-color: #3b5998; }
+    .dot-pink { background-color: #d64573; }
+    .dot-green { background-color: #557a2b; }
+
+    /* 2. Contenedor Principal Web */
+    .web-container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 25px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex-grow: 1;
+    }
+
+    /* Barra de Búsqueda */
+    .search-bar-container {
+      width: 100%;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 48px;
+      background-color: #ffffff;
+      border: 2px solid #a82e26;
+      border-radius: 8px;
+      padding: 0 18px;
+      font-size: 15px;
+      outline: none;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    /* Grilla de la Página (Contenido a la izquierda, Panel lateral a la derecha) */
+    .layout-grid {
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    /* Área de Contenido Principal (Izquierda) */
+    .main-content {
+      border: 2px solid #4d662b;
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 20px;
+      min-height: 400px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .section-title {
+      color: #4d662b;
+      font-size: 18px;
+      font-weight: 700;
+      border-bottom: 2px solid #e3d2be;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+
+    .sandwich-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 15px;
+    }
+
+    .sandwich-card {
+      border: 1px solid #e0d6c3;
+      background-color: #faf6ee;
+      border-radius: 8px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sandwich-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sandwich-name {
+      font-weight: 700;
+      color: #8b1e18;
+      font-size: 16px;
+    }
+
+    .sandwich-price {
+      font-weight: 800;
+      color: #4d662b;
+      font-size: 15px;
+    }
+
+    .sandwich-desc {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    /* Panel Lateral (Derecha) */
+    .sidebar-right {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .filter-btn {
+      height: 40px;
+      border: 2px solid #4d662b;
+      border-radius: 20px;
+      background-color: #ffffff;
+      color: #4d662b;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .categories-panel {
+      border: 2px solid #8b1e18;
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .category-item {
+      background-color: #eddcc4;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .category-item:hover, .category-item.active {
+      background-color: #a82e26;
+      color: #ffffff;
+    }
+
+    /* 3. Footer Web */
+    footer {
+      background-color: #4d662b;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #ffffff;
+      font-size: 13px;
+      margin-top: auto;
+    }
+
+    footer .social-icons {
+      display: flex;
+      gap: 10px;
+    }
+
+    footer .social-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-left">
+      <div class="logo-circle">B</div>
+      <div class="menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <div class="header-center-title">BOCATO</div>
+
+    <div class="header-right">
+      <div class="header-badge"></div>
+      <div class="theme-selectors">
+        <div class="color-dot dot-blue"></div>
+        <div class="color-dot dot-pink"></div>
+        <div class="color-dot dot-green"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido Web -->
+  <div class="web-container">
+    <!-- Barra de Búsqueda -->
+    <div class="search-bar-container">
+      <input type="text" class="search-input" placeholder="Buscar en el menú de Bocato (Ej. Italiano, Chacarero)...">
+    </div>
+
+    <!-- Grilla principal -->
+    <div class="layout-grid">
+      <!-- ÁREA DE SÁNGUCHES (Izquierda) -->
+      <main class="main-content">
+        <div class="section-title">Menú de Sánguches Tradicionales</div>
+        <div id="sandwich-list" class="sandwich-grid">
+          <p style="font-size: 13px; color: #888;">Cargando menú desde GraphQL...</p>
+        </div>
+      </main>
+
+      <!-- PANEL LATERAL DERECHO (Filtros y Categorías) -->
+      <aside class="sidebar-right">
+        <button class="filter-btn">Filtros de Búsqueda ▾</button>
+        <div class="categories-panel">
+          <div class="category-item active">Todos los Sánguches</div>
+          <div class="category-item">Especiales Italianos</div>
+          <div class="category-item">Barros Luco</div>
+          <div class="category-item">Promociones</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div>Bocato Sánguches Italianos © 2026 - Tarea DWM</div>
+    <div class="social-icons">
+      <div class="color-dot dot-blue social-dot"></div>
+      <div class="color-dot dot-pink social-dot"></div>
+      <div class="color-dot dot-green social-dot"></div>
+    </div>
+  </footer>
+
+  <!-- Consulta GraphQL -->
+  <script>
+    async function loadSandwiches() {
+      const query = `
+        query {
+          getSandwiches {
+            id
+            nombre
+            precio
+            descripcion
+          }
+        }
+      `;
+
+      try {
+        const response = await fetch('/graphql', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query })
+        });
+
+        const result = await response.json();
+        const sandwiches = result.data.getSandwiches;
+        const container = document.getElementById('sandwich-list');
+
+        if (!sandwiches || sandwiches.length === 0) {
+          container.innerHTML = '<p style="font-size: 13px;">No hay sánguches cargados.</p>';
+          return;
+        }
+
+        container.innerHTML = sandwiches.map(s => `
+          <div class="sandwich-card">
+            <div class="sandwich-header">
+              <span class="sandwich-name">${s.nombre}</span>
+              <span class="sandwich-price">$${s.precio}</span>
+            </div>
+            <div class="sandwich-desc">${s.descripcion || 'Sin descripción'}</div>
+          </div>
+        `).join('');
+
+      } catch (error) {
+        console.error('Error al conectar con GraphQL:', error);
+        document.getElementById('sandwich-list').innerHTML = 
+          '<p style="font-size: 13px; color: red;">Error al consultar GraphQL.</p>';
+      }
+    }
+
+    loadSandwiches();
+  </script>
+
+</body>
+</html>
