@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Header, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -6,8 +6,23 @@ from pydantic import BaseModel
 from typing import List, Optional
 import uuid
 import os
+import secrets
 
-app = FastAPI(title="Bocato API - FastAPI & MongoDB (Simulado)")
+# configuracion de seguridad (vault/env)
+INTERNAL_GATEWAY_SECRET = os.getenv("BACKEND_SHARED_SECRET", "gateway-api-secret-456")
+
+async def verify_gateway(x_gateway_secret: str = Header(None)):
+    if not x_gateway_secret or not secrets.compare_digest(x_gateway_secret, INTERNAL_GATEWAY_SECRET):
+        raise HTTPException(
+            status_code=403, 
+            detail="Solicitud no autorizada: Falla de autenticación con el Gateway"
+        )
+
+# inicializacion de la app(protegida)
+app = FastAPI(
+    title="Bocato API - FastAPI & MongoDB (Simulado)",
+    dependencies=[Depends(verify_gateway)]
+)
 
 # 1. PERMITIR CONEXIONES DESDE EL NAVEGADOR (CORS)
 app.add_middleware(
