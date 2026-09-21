@@ -295,71 +295,127 @@
   </div>
 
   <script>
-    async function fetchSandwiches() {
-      const container = document.getElementById('products-container');
-      
-      // Datos locales de respaldo para GitHub Pages
-      const fallbackSandwiches = [
-        {
-          nombre: "Italiano Tradicional",
-          precio: 5500,
-          descripcion: "Churrasco, tomate, palta y mayonesa casera en pan frica.",
-          imagen: "https://media.istockphoto.com/id/1336324521/es/foto/corte-en-fr%C3%ADo-casero-italiano-sub-sandwich.jpg?s=612x612&w=0&k=20&c=5XEM00MSO8c_eW3oNTrBBQBjIwi3QU3F9wUxe2J6Y64="
-        },
-        {
-          nombre: "Barros Luco",
-          precio: 5200,
-          descripcion: "Abundante churrasco con queso mantecoso derretido.",
-          imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy3wg5Ol0LnHu_tHvWf9QtH0-pLpHdeRnealN7S3cMt1Slsk8ocVbZMUI&s=10"
-        },
-        {
-          nombre: "Chacarero Bocato",
-          precio: 5800,
-          descripcion: "Churrasco, porotos verdes frescos, tomate y ají verde.",
-          imagen: "https://tofuu.getjusto.com/orioneat-local/resized2/k49HxECyMRhoTGMgz-2400-x.webp"
-        }
-      ];
+  let currentCategory = 'todos';
 
-      let sandwiches = [];
-
-      try {
-        const response = await fetch('http://127.0.0.1:8000/sandwiches');
-        if (!response.ok) throw new Error('API local no disponible');
-        sandwiches = await response.json();
-      } catch (error) {
-        console.warn('Cargando menú en modo estático (GitHub Pages)');
-        sandwiches = fallbackSandwiches;
+  async function fetchSandwiches() {
+    const container = document.getElementById('products-container');
+    
+    // Datos de ejemplo clasificados por categorías
+    const fallbackSandwiches = [
+      {
+        nombre: "Italiano Tradicional",
+        precio: 5500,
+        descripcion: "Churrasco, tomate, palta y mayonesa casera en pan frica.",
+        categoria: "Sánguches Tradicionales",
+        destacado: true,
+        imagen: "https://media.istockphoto.com/id/1336324521/es/foto/corte-en-fr%C3%ADo-casero-italiano-sub-sandwich.jpg?s=612x612&w=0&k=20&c=5XEM00MSO8c_eW3oNTrBBQBjIwi3QU3F9wUxe2J6Y64="
+      },
+      {
+        nombre: "Barros Luco Especial",
+        precio: 5200,
+        descripcion: "Abundante churrasco con queso mantecoso derretido.",
+        categoria: "Barros Luco",
+        destacado: true,
+        imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy3wg5Ol0LnHu_tHvWf9QtH0-pLpHdeRnealN7S3cMt1Slsk8ocVbZMUI&s=10"
+      },
+      {
+        nombre: "Chacarero Bocato",
+        precio: 5800,
+        descripcion: "Churrasco, porotos verdes frescos, tomate y ají verde.",
+        categoria: "Especiales Italianos",
+        destacado: true,
+        imagen: "https://tofuu.getjusto.com/orioneat-local/resized2/k49HxECyMRhoTGMgz-2400-x.webp"
+      },
+      {
+        nombre: "Bebida Coca-Cola 350ml",
+        precio: 1500,
+        descripcion: "Bebida en lata helada.",
+        categoria: "Bebestibles",
+        destacado: false,
+        imagen: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=300&q=80"
       }
+    ];
 
-      container.innerHTML = sandwiches.map(s => `
-        <div class="product-card">
-          <div class="product-info">
-            <div>
-              <div class="product-title">${s.nombre}</div>
-              <div class="product-price">$${s.precio.toLocaleString('es-CL')}</div>
-              <div class="product-desc">${s.descripcion}</div>
-            </div>
-          </div>
-          <div class="product-img-wrapper">
-            <img src="${s.imagen}" class="product-img" alt="${s.nombre}">
-            <button class="btn-add">+</button>
-          </div>
-        </div>
-      `).join('');
+    let sandwiches = [];
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/sandwiches');
+      if (!response.ok) throw new Error('API local no disponible');
+      sandwiches = await response.json();
+    } catch (error) {
+      console.warn('Cargando menú en modo estático (GitHub Pages)');
+      sandwiches = fallbackSandwiches;
     }
 
-    // Buscador en tiempo real
-    document.getElementById('search-input').addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase();
-      const cards = document.querySelectorAll('.product-card');
-      
-      cards.forEach(card => {
-        const title = card.querySelector('.product-title').textContent.toLowerCase();
-        card.style.display = title.includes(term) ? 'grid' : 'none';
-      });
-    });
+    // Filtrado según categoría seleccionada
+    let filtered = sandwiches;
+    if (currentCategory === 'ofertas') {
+      filtered = sandwiches.filter(s => s.destacado || s.precio < 5500);
+    } else if (currentCategory !== 'todos') {
+      filtered = sandwiches.filter(s => s.categoria && s.categoria.toLowerCase() === currentCategory.toLowerCase());
+    }
 
-    fetchSandwiches();
-  </script>
+    if (filtered.length === 0) {
+      container.innerHTML = '<p style="color: #777; grid-column: 1/-1;">No hay productos disponibles en esta categoría.</p>';
+      return;
+    }
+
+    container.innerHTML = filtered.map(s => `
+      <div class="product-card" data-category="${s.categoria || 'otros'}">
+        <div class="product-info">
+          <div>
+            <div class="product-title">${s.nombre}</div>
+            <div class="product-price">$${s.precio.toLocaleString('es-CL')}</div>
+            <div class="product-desc">${s.descripcion}</div>
+          </div>
+        </div>
+        <div class="product-img-wrapper">
+          <img src="${s.imagen}" class="product-img" alt="${s.nombre}">
+          <button class="btn-add">+</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // 1. Funcionalidad de los botones "Retiro en local" / "Delivery"
+  document.querySelectorAll('.btn-toggle').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('.btn-toggle').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+    });
+  });
+
+  // 2. Funcionalidad de las Categorías laterales
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+
+      const text = e.target.textContent.trim().toLowerCase();
+      if (text.includes('ofertas')) {
+        currentCategory = 'ofertas';
+        document.querySelector('.section-title').textContent = '⚡ Ofertas de hoy';
+      } else {
+        currentCategory = e.target.textContent.replace('⚡', '').trim();
+        document.querySelector('.section-title').textContent = currentCategory;
+      }
+
+      fetchSandwiches();
+    });
+  });
+
+  // 3. Buscador en tiempo real
+  document.getElementById('search-input').addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    const cards = document.querySelectorAll('.product-card');
+    
+    cards.forEach(card => {
+      const title = card.querySelector('.product-title').textContent.toLowerCase();
+      card.style.display = title.includes(term) ? 'grid' : 'none';
+    });
+  });
+
+  fetchSandwiches();
+</script>
 </body>
 </html>
