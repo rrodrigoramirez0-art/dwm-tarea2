@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bocato - Sánguches Italianos</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #fcfbfa;
+      color: #1a1a1a;
+    }
+
+    /* Top Bar */
+    header {
+      background-color: #e3d2be;
+      color: #1a1a1a;
+      padding: 12px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: 1px;
+    }
+
+    .brand-badge {
+      background-color: #c82333;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .header-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-toggle {
+      background-color: #222;
+      color: #fff;
+      border: 1px solid #333;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-toggle.active {
+      background-color: #ffffff;
+      color: #000000;
+    }
+
+    /* Subheader Search */
+    .search-section {
+      padding: 15px 5%;
+      background-color: #ffffff;
+      border-bottom: 1px solid #eee;
+    }
+
+    .search-input {
+      width: 100%;
+      max-width: 600px;
+      padding: 12px 20px;
+      border-radius: 25px;
+      border: 1px solid #e0e0e0;
+      background-color: #f5f5f5;
+      font-size: 14px;
+      outline: none;
+    }
+
+    /* Layout Principal estilo Hand Roll */
+    .container {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 40px;
+      padding: 30px 5%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Categorías Laterales (Izquierda) */
+    .sidebar {
+      position: sticky;
+      top: 90px;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .category-btn {
+      text-align: left;
+      padding: 10px 14px;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #555;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .category-btn:hover {
+      background-color: #f0f0f0;
+      color: #000;
+    }
+
+    .category-btn.active {
+      background-color: #111111;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    /* Menú y Tarjetas (Derecha) */
+    .menu-section {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    /* Tarjeta Horizontal */
+    .product-card {
+      background: #ffffff;
+      border: 1px solid #eaeaea;
+      border-radius: 16px;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1fr 130px;
+      gap: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+    }
+
+    .product-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .product-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 4px;
+    }
+
+    .product-price {
+      font-size: 15px;
+      font-weight: 800;
+      color: #2b7a2b;
+      margin-bottom: 8px;
+    }
+
+    .product-desc {
+      font-size: 12px;
+      color: #777;
+      line-height: 1.4;
+    }
+
+    .product-img-wrapper {
+      position: relative;
+      width: 130px;
+      height: 110px;
+      border-radius: 12px;
+      overflow: hidden;
+      background-color: #f8f8f8;
+    }
+
+    .product-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .btn-add {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+      font-size: 18px;
+      font-weight: bold;
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+
+    .btn-add:hover {
+      background-color: #111;
+      color: #fff;
+    }
+
+    /* Adaptabilidad Responsiva */
+    @media (max-width: 850px) {
+      .container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .sidebar {
+        position: static;
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 10px;
+      }
+
+      .category-btn {
+        white-space: nowrap;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header>
+    <div class="brand">
+      <span class="brand-badge">B</span>
+      <span>BOCATO</span>
+    </div>
+    <div class="header-controls">
+      <button class="btn-toggle active">Retiro en local</button>
+      <button class="btn-toggle">Delivery</button>
+    </div>
+  </header>
+
+  <!-- Buscador -->
+  <div class="search-section">
+    <input type="text" class="search-input" id="search-input" placeholder="Buscar en Bocato (Ej. Italiano, Luco)...">
+  </div>
+
+  <!-- Layout Principal -->
+  <div class="container">
+    <!-- Categorías a la Izquierda -->
+    <aside class="sidebar">
+      <button class="category-btn active">⚡ Ofertas de hoy</button>
+      <button class="category-btn">Sánguches Tradicionales</button>
+      <button class="category-btn">Especiales Italianos</button>
+      <button class="category-btn">Barros Luco</button>
+      <button class="category-btn">Bebestibles</button>
+    </aside>
+
+    <!-- Menú a la Derecha -->
+    <main class="menu-section">
+      <div class="section-title">⚡ Sánguches Destacados</div>
+      <div id="products-container" class="products-grid">
+        <p style="color: #888; font-size: 14px;">Cargando menú...</p>
+      </div>
+    </main>
+  </div>
+
+  <script>
+  let currentCategory = 'todos';
+
+  async function fetchSandwiches() {
+    const container = document.getElementById('products-container');
+    
+    // Datos de ejemplo clasificados por categorías
+    const fallbackSandwiches = [
+      {
+        nombre: "Italiano Tradicional",
+        precio: 5500,
+        descripcion: "Churrasco, tomate, palta y mayonesa casera en pan frica.",
+        categoria: "Sánguches Tradicionales",
+        destacado: true,
+        imagen: "https://media.istockphoto.com/id/1336324521/es/foto/corte-en-fr%C3%ADo-casero-italiano-sub-sandwich.jpg?s=612x612&w=0&k=20&c=5XEM00MSO8c_eW3oNTrBBQBjIwi3QU3F9wUxe2J6Y64="
+      },
+      {
+        nombre: "Barros Luco Especial",
+        precio: 5200,
+        descripcion: "Abundante churrasco con queso mantecoso derretido.",
+        categoria: "Barros Luco",
+        destacado: true,
+        imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy3wg5Ol0LnHu_tHvWf9QtH0-pLpHdeRnealN7S3cMt1Slsk8ocVbZMUI&s=10"
+      },
+      {
+        nombre: "Chacarero Bocato",
+        precio: 5800,
+        descripcion: "Churrasco, porotos verdes frescos, tomate y ají verde.",
+        categoria: "Especiales Italianos",
+        destacado: true,
+        imagen: "https://tofuu.getjusto.com/orioneat-local/resized2/k49HxECyMRhoTGMgz-2400-x.webp"
+      },
+      {
+        nombre: "Bebida Coca-Cola 350ml",
+        precio: 1500,
+        descripcion: "Bebida en lata helada.",
+        categoria: "Bebestibles",
+        destacado: false,
+        imagen: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=300&q=80"
+      }
+    ];
+
+    let sandwiches = [];
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/sandwiches');
+      if (!response.ok) throw new Error('API local no disponible');
+      sandwiches = await response.json();
+    } catch (error) {
+      console.warn('Cargando menú en modo estático (GitHub Pages)');
+      sandwiches = fallbackSandwiches;
+    }
+
+    // Filtrado según categoría seleccionada
+    let filtered = sandwiches;
+    if (currentCategory === 'ofertas') {
+      filtered = sandwiches.filter(s => s.destacado || s.precio < 5500);
+    } else if (currentCategory !== 'todos') {
+      filtered = sandwiches.filter(s => s.categoria && s.categoria.toLowerCase() === currentCategory.toLowerCase());
+    }
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<p style="color: #777; grid-column: 1/-1;">No hay productos disponibles en esta categoría.</p>';
+      return;
+    }
+
+    container.innerHTML = filtered.map(s => `
+      <div class="product-card" data-category="${s.categoria || 'otros'}">
+        <div class="product-info">
+          <div>
+            <div class="product-title">${s.nombre}</div>
+            <div class="product-price">$${s.precio.toLocaleString('es-CL')}</div>
+            <div class="product-desc">${s.descripcion}</div>
+          </div>
+        </div>
+        <div class="product-img-wrapper">
+          <img src="${s.imagen}" class="product-img" alt="${s.nombre}">
+          <button class="btn-add">+</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // 1. Funcionalidad de los botones "Retiro en local" / "Delivery"
+  document.querySelectorAll('.btn-toggle').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('.btn-toggle').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+    });
+  });
+
+  // 2. Funcionalidad de las Categorías laterales
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+
+      const text = e.target.textContent.trim().toLowerCase();
+      if (text.includes('ofertas')) {
+        currentCategory = 'ofertas';
+        document.querySelector('.section-title').textContent = '⚡ Ofertas de hoy';
+      } else {
+        currentCategory = e.target.textContent.replace('⚡', '').trim();
+        document.querySelector('.section-title').textContent = currentCategory;
+      }
+
+      fetchSandwiches();
+    });
+  });
+
+  // 3. Buscador en tiempo real
+  document.getElementById('search-input').addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    const cards = document.querySelectorAll('.product-card');
+    
+    cards.forEach(card => {
+      const title = card.querySelector('.product-title').textContent.toLowerCase();
+      card.style.display = title.includes(term) ? 'grid' : 'none';
+    });
+  });
+
+  fetchSandwiches();
+</script>
+</body>
+</html>
