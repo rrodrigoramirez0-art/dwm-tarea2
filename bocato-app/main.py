@@ -2,6 +2,23 @@ from fastapi import FastAPI, HTTPException, status
 from pydantic import BaseModel
 from typing import List, Optional
 import uuid
+import os
+import secrets
+
+# configuracion de seguridad (vault/env)
+INTERNAL_GATEWAY_SECRET = os.getenv("BACKEND_SHARED_SECRET", "gateway-api-secret-456")
+
+async def verify_gateway(x_gateway_secret: str = Header(None)):
+    if not x_gateway_secret or not secrets.compare_digest(x_gateway_secret, INTERNAL_GATEWAY_SECRET):
+        raise HTTPException(
+            status_code=403, 
+            detail="Solicitud no autorizada: Falla de autenticación con el Gateway"
+        )
+# inicializacion de la app(protegida)
+app = FastAPI(
+    title="Bocato API - FastAPI & MongoDB (Simulado)",
+    dependencies=[Depends(verify_gateway)]
+)
 
 app = FastAPI(title="Bocato API - FastAPI & MongoDB (Simulado)")
 
