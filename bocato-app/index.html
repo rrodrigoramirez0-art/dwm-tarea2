@@ -62,11 +62,13 @@
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
+      transition: all 0.2s;
     }
 
     .btn-toggle.active {
       background-color: #ffffff;
       color: #000000;
+      border-color: #ffffff;
     }
 
     /* Subheader Search */
@@ -87,7 +89,7 @@
       outline: none;
     }
 
-    /* Layout Principal estilo Hand Roll */
+    /* Layout Principal */
     .container {
       display: grid;
       grid-template-columns: 240px 1fr;
@@ -97,7 +99,7 @@
       margin: 0 auto;
     }
 
-    /* Categorías Laterales (Izquierda) */
+    /* Categorías Laterales */
     .sidebar {
       position: sticky;
       top: 90px;
@@ -131,7 +133,7 @@
       font-weight: 700;
     }
 
-    /* Menú y Tarjetas (Derecha) */
+    /* Menú y Tarjetas */
     .menu-section {
       display: flex;
       flex-direction: column;
@@ -235,7 +237,6 @@
       color: #fff;
     }
 
-    /* Adaptabilidad Responsiva */
     @media (max-width: 850px) {
       .container {
         grid-template-columns: 1fr;
@@ -271,23 +272,23 @@
 
   <!-- Buscador -->
   <div class="search-section">
-    <input type="text" class="search-input" id="search-input" placeholder="Buscar en Bocato (Ej. Italiano, Luco)...">
+    <input type="text" class="search-input" id="search-input" placeholder="Buscar en Bocato (Ej. Italiano, Luco, Bebida)...">
   </div>
 
   <!-- Layout Principal -->
   <div class="container">
-    <!-- Categorías a la Izquierda -->
+    <!-- Categorías Laterales -->
     <aside class="sidebar">
-      <button class="category-btn active">⚡ Ofertas de hoy</button>
-      <button class="category-btn">Sánguches Tradicionales</button>
-      <button class="category-btn">Especiales Italianos</button>
-      <button class="category-btn">Barros Luco</button>
-      <button class="category-btn">Bebestibles</button>
+      <button class="category-btn active" data-cat="ofertas">⚡ Ofertas de hoy</button>
+      <button class="category-btn" data-cat="tradicionales">Sánguches Tradicionales</button>
+      <button class="category-btn" data-cat="italianos">Especiales Italianos</button>
+      <button class="category-btn" data-cat="luco">Barros Luco</button>
+      <button class="category-btn" data-cat="bebestibles">Bebestibles</button>
     </aside>
 
-    <!-- Menú a la Derecha -->
+    <!-- Menú Principal -->
     <main class="menu-section">
-      <div class="section-title">⚡ Sánguches Destacados</div>
+      <div class="section-title" id="menu-title">⚡ Ofertas de hoy</div>
       <div id="products-container" class="products-grid">
         <p style="color: #888; font-size: 14px;">Cargando menú...</p>
       </div>
@@ -295,71 +296,199 @@
   </div>
 
   <script>
-    async function fetchSandwiches() {
-      const container = document.getElementById('products-container');
-      
-      // Datos locales de respaldo para GitHub Pages
-      const fallbackSandwiches = [
-        {
-          nombre: "Italiano Tradicional",
-          precio: 5500,
-          descripcion: "Churrasco, tomate, palta y mayonesa casera en pan frica.",
-          imagen: "https://media.istockphoto.com/id/1336324521/es/foto/corte-en-fr%C3%ADo-casero-italiano-sub-sandwich.jpg?s=612x612&w=0&k=20&c=5XEM00MSO8c_eW3oNTrBBQBjIwi3QU3F9wUxe2J6Y64="
-        },
-        {
-          nombre: "Barros Luco",
-          precio: 5200,
-          descripcion: "Abundante churrasco con queso mantecoso derretido.",
-          imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy3wg5Ol0LnHu_tHvWf9QtH0-pLpHdeRnealN7S3cMt1Slsk8ocVbZMUI&s=10"
-        },
-        {
-          nombre: "Chacarero Bocato",
-          precio: 5800,
-          descripcion: "Churrasco, porotos verdes frescos, tomate y ají verde.",
-          imagen: "https://tofuu.getjusto.com/orioneat-local/resized2/k49HxECyMRhoTGMgz-2400-x.webp"
-        }
-      ];
+    // Catálogo completo de variedad local para respaldar cuando no responda la API
+    const baseCatalog = [
+      {
+        id: "1",
+        nombre: "Barros Luco Tradicional",
+        precio: 5200,
+        descripcion: "Abundante churrasco con queso mantecoso derretido.",
+        cat: "luco",
+        oferta: true,
+        imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTy3wg5Ol0LnHu_tHvWf9QtH0-pLpHdeRnealN7S3cMt1Slsk8ocVbZMUI&s=10"
+      },
+      {
+        id: "2",
+        nombre: "Italiano Tradicional",
+        precio: 5500,
+        descripcion: "Churrasco, tomate, palta y mayonesa casera.",
+        cat: "italianos",
+        oferta: true,
+        imagen: "https://media.istockphoto.com/id/1336324521/es/foto/corte-en-fr%C3%ADo-casero-italiano-sub-sandwich.jpg?s=612x612&w=0&k=20&c=5XEM00MSO8c_eW3oNTrBBQBjIwi3QU3F9wUxe2J6Y64="
+      },
+      {
+        id: "3",
+        nombre: "Chacarero Bocato",
+        precio: 5800,
+        descripcion: "Churrasco, porotos verdes frescos, tomate y ají verde.",
+        cat: "tradicionales",
+        oferta: false,
+        imagen: "https://tofuu.getjusto.com/orioneat-local/resized2/k49HxECyMRhoTGMgz-2400-x.webp"
+      },
+      {
+        id: "4",
+        nombre: "Churrasco Ave Mayo",
+        precio: 4800,
+        descripcion: "Pechuga de pollo desmenuzada con mayonesa casera.",
+        cat: "tradicionales",
+        oferta: true,
+        imagen: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=300&q=80"
+      },
+      {
+        id: "5",
+        nombre: "Barros Luco Doble Queso",
+        precio: 5900,
+        descripcion: "Churrasco con doble capa de queso mantecoso y gouda.",
+        cat: "luco",
+        oferta: false,
+        imagen: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300&q=80"
+      },
+      {
+        id: "6",
+        nombre: "Lomito Italiano Especial",
+        precio: 5600,
+        descripcion: "Lomito de cerdo marinado, palta fresca, tomate y mayo.",
+        cat: "italianos",
+        oferta: false,
+        imagen: "https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=300&q=80"
+      },
+      {
+        id: "7",
+        nombre: "Bebida Coca-Cola 350ml",
+        precio: 1500,
+        descripcion: "Bebida gaseosa helada en lata.",
+        cat: "bebestibles",
+        oferta: true,
+        imagen: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=300&q=80"
+      },
+      {
+        id: "8",
+        nombre: "Bebida Sprite 350ml",
+        precio: 1500,
+        descripcion: "Limonada refrescante y helada.",
+        cat: "bebestibles",
+        oferta: false,
+        imagen: "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&w=300&q=80"
+      },
+      {
+        id: "9",
+        nombre: "Jugo Natural Naranja",
+        precio: 2200,
+        descripcion: "Exprimidor 100% natural 500ml.",
+        cat: "bebestibles",
+        oferta: true,
+        imagen: "https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=300&q=80"
+      }
+    ];
 
-      let sandwiches = [];
+    let allLoadedProducts = [];
+    let activeCategory = 'ofertas';
 
+    async function initApp() {
       try {
-        const response = await fetch('http://127.0.0.1:8000/sandwiches');
-        if (!response.ok) throw new Error('API local no disponible');
-        sandwiches = await response.json();
-      } catch (error) {
-        console.warn('Cargando menú en modo estático (GitHub Pages)');
-        sandwiches = fallbackSandwiches;
+        const res = await fetch('http://127.0.0.1:8000/sandwiches');
+        if (!res.ok) throw new Error();
+        const apiData = await res.json();
+        
+        // Si la API responde pero tiene pocos items, combinamos con Bebestibles
+        allLoadedProducts = apiData.map(item => {
+          const name = (item.nombre || '').toLowerCase();
+          let cat = 'tradicionales';
+          if (name.includes('luco')) cat = 'luco';
+          else if (name.includes('italiano')) cat = 'italianos';
+          else if (name.includes('coca') || name.includes('jugo') || name.includes('bebida') || name.includes('sprite')) cat = 'bebestibles';
+
+          return {
+            ...item,
+            cat: item.cat || cat,
+            oferta: item.precio <= 5200 || item.disponible
+          };
+        });
+
+        // Asegurar que siempre haya bebestibles agregando los faltantes
+        const hasDrinks = allLoadedProducts.some(p => p.cat === 'bebestibles');
+        if (!hasDrinks) {
+          allLoadedProducts = [...allLoadedProducts, ...baseCatalog.filter(p => p.cat === 'bebestibles')];
+        }
+      } catch (e) {
+        allLoadedProducts = baseCatalog;
       }
 
-      container.innerHTML = sandwiches.map(s => `
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const container = document.getElementById('products-container');
+      const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+
+      let filtered = allLoadedProducts;
+
+      // 1. Filtrar por categoría seleccionada
+      if (activeCategory === 'ofertas') {
+        filtered = filtered.filter(p => p.oferta);
+      } else {
+        filtered = filtered.filter(p => p.cat === activeCategory);
+      }
+
+      // 2. Filtrar por texto del buscador si se escribe algo
+      if (searchTerm !== '') {
+        filtered = filtered.filter(p => 
+          p.nombre.toLowerCase().includes(searchTerm) || 
+          p.descripcion.toLowerCase().includes(searchTerm)
+        );
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<p style="color: #777; grid-column: 1/-1;">No hay productos disponibles en esta categoría.</p>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(p => `
         <div class="product-card">
           <div class="product-info">
             <div>
-              <div class="product-title">${s.nombre}</div>
-              <div class="product-price">$${s.precio.toLocaleString('es-CL')}</div>
-              <div class="product-desc">${s.descripcion}</div>
+              <div class="product-title">${p.nombre}</div>
+              <div class="product-price">$${p.precio.toLocaleString('es-CL')}</div>
+              <div class="product-desc">${p.descripcion || 'Especialidad de la casa Bocato.'}</div>
             </div>
           </div>
           <div class="product-img-wrapper">
-            <img src="${s.imagen}" class="product-img" alt="${s.nombre}">
+            <img src="${p.imagen || 'https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=300&q=80'}" class="product-img" alt="${p.nombre}">
             <button class="btn-add">+</button>
           </div>
         </div>
       `).join('');
     }
 
-    // Buscador en tiempo real
-    document.getElementById('search-input').addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase();
-      const cards = document.querySelectorAll('.product-card');
-      
-      cards.forEach(card => {
-        const title = card.querySelector('.product-title').textContent.toLowerCase();
-        card.style.display = title.includes(term) ? 'grid' : 'none';
+    // Eventos para botones Retiro / Delivery
+    document.querySelectorAll('.btn-toggle').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.btn-toggle').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
       });
     });
 
-    fetchSandwiches();
+    // Eventos para categorías laterales
+    document.querySelectorAll('.category-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+
+        activeCategory = e.target.getAttribute('data-cat');
+        document.getElementById('menu-title').textContent = e.target.textContent;
+
+        // Limpiar buscador al cambiar de categoría
+        document.getElementById('search-input').value = '';
+        renderProducts();
+      });
+    });
+
+    // Evento del buscador en tiempo real
+    document.getElementById('search-input').addEventListener('input', () => {
+      renderProducts();
+    });
+
+    initApp();
   </script>
 </body>
 </html>
