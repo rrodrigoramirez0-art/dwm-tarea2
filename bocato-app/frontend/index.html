@@ -384,18 +384,17 @@
     let allLoadedProducts = [];
     let activeCategory = 'ofertas';
 
-  async function initApp() {
+   async function initApp() {
   try {
-    // Apuntamos al API Gateway (puerto 8000) enviando el Bearer Token de cliente
     const res = await fetch('http://127.0.0.1:8000/sandwiches', {
       headers: {
         'Authorization': 'Bearer student-token-123'
       }
     });
-    
-    if (!res.ok) throw new Error(`Error en la petición: Status ${res.status}`);
+    if (!res.ok) throw new Error();
     const apiData = await res.json();
     
+    // Si la API responde pero tiene pocos items, combinamos con Bebestibles
     allLoadedProducts = apiData.map(item => {
       const name = (item.nombre || '').toLowerCase();
       let cat = 'tradicionales';
@@ -415,7 +414,6 @@
       allLoadedProducts = [...allLoadedProducts, ...baseCatalog.filter(p => p.cat === 'bebestibles')];
     }
   } catch (e) {
-    console.warn("No se pudo conectar al API Gateway o token inválido. Usando catálogo local.", e);
     allLoadedProducts = baseCatalog;
   }
 
